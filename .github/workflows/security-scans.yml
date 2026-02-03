@@ -1,53 +1,53 @@
 # The job ID (semgrep_sast_scan) is used for referencing this job, while 'name' is the display title in the GitHub UI.
 
-  semgrep_sast_scan:
+semgrep_sast_scan:
 
-    name: Semgrep SAST Scan
+name: Semgrep SAST Scan
 
-    runs-on: ubuntu-latest
+runs-on: ubuntu-latest
 
-    steps:
+steps:
 
-      # Step 1: Check out the repository's code so the workflow can access it.
+# Step 1: Check out the repository's code so the workflow can access it.
 
-      - name: Checkout code
+- name: Checkout code
 
-        uses: actions/checkout@v4
+uses: actions/checkout@v4
 
- 
 
-      # Step 2: Run the Semgrep SAST scan using its official Docker image.
 
-      # This command mounts the current directory into the container and tells Semgrep to scan it.
+# Step 2: Run the Semgrep SAST scan using its official Docker image.
 
-      # The results are output in JSON format to a file named 'semgrep-results.json'.
+# This command mounts the current directory into the container and tells Semgrep to scan it.
 
-      - name: Run Semgrep Scan
+# The results are output in JSON format to a file named 'semgrep-results.json'.
 
-        run: |
+- name: Run Semgrep Scan
 
-              docker run --rm -v "$(pwd):/src" semgrep/semgrep semgrep scan /src --json -o semgrep-results.json
+run: |
 
-             
-
-      # Provide a better view of the output             
-
-      - name: Pretty-print Semgrep JSON
-
-        run: jq . semgrep-results.json
+  docker run --rm -v "$(pwd):/src" semgrep/semgrep semgrep scan /src --json -o semgrep-results.json
 
  
 
-      # Step 3: Upload the JSON report as a build artifact.
+# Provide a better view of the output             
 
-      # This makes the results available for download from the workflow run's summary page.
+- name: Pretty-print Semgrep JSON
 
-      - name: Upload Semgrep results
+run: jq . semgrep-results.json
 
-        uses: actions/upload-artifact@v4
 
-        with:
 
-          name: semgrep-results
+# Step 3: Upload the JSON report as a build artifact.
 
-          path: semgrep-results.json
+# This makes the results available for download from the workflow run's summary page.
+
+- name: Upload Semgrep results
+
+uses: actions/upload-artifact@v4
+
+with:
+
+name: semgrep-results
+
+path: semgrep-results.json
